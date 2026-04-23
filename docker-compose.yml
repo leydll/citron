@@ -1,0 +1,20 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - PORT=${BACKEND_PORT}
+    expose:
+      - "${BACKEND_PORT}"
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_PORT=${BACKEND_PORT}
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT}:80"
+
