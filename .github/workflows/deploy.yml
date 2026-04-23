@@ -14,7 +14,7 @@ jobs:
 
     env:
       BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/citron-backend
-      FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/citron-frontend 
+      FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/citron-frontend
 
     steps:
       - name: Checkout
@@ -70,6 +70,7 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             set -euo pipefail
+            trap 'echo "---- DEBUG K8S (failure) ----"; kubectl get pods -o wide || true; kubectl get events --sort-by=.lastTimestamp | tail -n 50 || true; kubectl describe deployment citron-backend || true; kubectl describe deployment citron-frontend || true' ERR
 
             if ! command -v kubectl >/dev/null 2>&1; then
               echo "kubectl introuvable sur la VM"
@@ -93,6 +94,6 @@ jobs:
 
             kubectl apply -f k8s/
             kubectl rollout restart deployment/citron-backend deployment/citron-frontend
-            kubectl rollout status deployment/citron-backend --timeout=120s
-            kubectl rollout status deployment/citron-frontend --timeout=120s
+            kubectl rollout status deployment/citron-backend --timeout=300s
+            kubectl rollout status deployment/citron-frontend --timeout=300s
 
