@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BACKEND_IMAGE: mon-user-docker/mon-app-back
-      FRONTEND_IMAGE: mon-user-docker/mon-app-front
+      BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/citron-backend
+      FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/citron-frontend 
 
     steps:
       - name: Checkout
