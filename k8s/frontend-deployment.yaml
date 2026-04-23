@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: citron-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: citron-frontend
+  template:
+    metadata:
+      labels:
+        app: citron-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: mon-user-docker/mon-app-front:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: BACKEND_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: citron-config
+                  key: BACKEND_HOST
+            - name: BACKEND_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: citron-config
+                  key: BACKEND_PORT
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
