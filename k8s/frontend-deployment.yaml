@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: mon-user-docker/mon-app-front:latest
+          image: leydlls/citron-frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80

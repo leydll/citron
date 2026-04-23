@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: mon-user-docker/mon-app-back:latest
+          image: leydlls/citron-backend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
